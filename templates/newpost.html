@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Add New Blog</h1>
+<form method='post' id="new_blog_posts">
+    <label>
+        New Blog Post:
+        <div>
+            <input type='text' name='blog_title' />
+            {% for list_item in input_errors['blog_title'] %}
+            {{ list_item }}
+            {% endfor %}
+        </div>
+        <div>
+            Type your blog!
+        </div>
+        <div>
+            <textarea rows="8" cols="50" name="blog_body" form="new_blog_posts"></textarea>
+            {% for list_item in input_errors['blog_body'] %}
+            {{ list_item }}
+            {% endfor %}
+        </div>
+    </label>
+    <input type='submit' value='Add Blog!' />
+</form>
+{% endblock %}
+
