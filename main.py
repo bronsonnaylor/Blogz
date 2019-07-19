@@ -32,6 +32,25 @@ class Blog(db.Model):
 #         self.email = email
 #         self.password=password
 
+@app.route('/post')
+def post():
+    #Need to pass in current blogs xtitle and body.
+    post_id = request.args.get('id')
+    print("here" + post_id)
+    current_blog = Blog.query.filter_by().all()
+    print(current_blog)
+    print("__/n")
+    print(type(current_blog))
+    print("__/n")
+    print(type(current_blog[0].title))
+    print("__/n")
+
+    blog_title = current_blog[int(post_id)-1].title
+    blog_body = current_blog[int(post_id)-1].body
+
+
+    return render_template('post.html', blog_title=blog_title, blog_body=blog_body)
+
 @app.route('/newpost', methods=['POST', 'GET'])
 def newpost():
     input_errors = {'blog_title':[], 'blog_body':[]}
@@ -50,7 +69,7 @@ def newpost():
             new_post = Blog(blog_title, blog_body)
             db.session.add(new_post)
             db.session.commit()
-            return redirect('/')
+            return render_template('post.html', blog_title=blog_title, blog_body=blog_body)
 
     return render_template('newpost.html', input_errors=input_errors)
     
@@ -60,9 +79,10 @@ def index():
 
     # owner = User.query.filter_by(email=session['email']).first()
 
-    if request.method == 'POST':
-        temp = "idunno"
     blogs = Blog.query.all()
+    for post in blogs:
+        id = post.id
+        print(id)
 
     return render_template('blog.html', title="Build-a-blog", blogs=blogs)
 
