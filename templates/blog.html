@@ -1,15 +1,39 @@
 {% extends "base.html" %}
-
 {% block content %}
-    <h1>Build-a-blog</h1>
-    <hr>
-    {% if blogs|length == 0 %}
-    <p>No blogs yet.</p>
-    {% else %}
-        {% for blog in blogs %}
-        <a href="/post?id={{blog.id}}"><h2>{{blog.title}}</h2></a>
-        <p>{{blog.body}}</p>
+
+{% if user_posts %}
+    <p>posts by {{username}}</p>
+    {% for post in user_posts %}
+        <p><a href="blog?id={{post.id}}">{{post.title}}</p></a>
+        {{post.body}}
+        <div class="author">Author: {{username}}</div>
         <hr>
+    {% endfor %}
+{% endif %}
+
+{% if post %}
+    <p>{{post.title}}</p>
+    {{post.body}}
+    <div class="author">Author: <a href="blog?user={{post.owner.username}}">{{post.owner.username}}</a></div>
+{% endif %}
+
+{% if list_all_blogs|length == 0 and not user_posts and not post %}
+    <p>{{username}} hasn't posted anything yet</p>
+{% endif %}
+
+{% if list_all_blogs|length > 0 %}
+    <p>All blogs</p>
+    <hr>
+    {% for post in list_all_blogs %}
+        <p><a href="blog?id={{post.id}}">{{post.title}}</a></p>
+        <p>{{post.body}}</p>
+        {% for user in list_all_users %}
+            {% if user.id == post.owner_id %}
+            <div class="author">Author: <a href='blog?user={{user.username}}'>{{user.username}}</a></div>
+            {% endif %}
         {% endfor %}
-    {% endif %}
+        <hr>
+    {% endfor %}
+{% endif %}
+
 {% endblock %}
